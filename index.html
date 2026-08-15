@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Biblioteca html2pdf para gerar o PDF no navegador -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <style>
         body {
@@ -414,102 +415,153 @@
         // Executa a função de carregar assim que o site abrir
         window.addEventListener('DOMContentLoaded', carregarDados);
 
-        // --- 3. NOVA Geração de PDF (Correção da página em branco) ---
-        function gerarPDF() {
+        // --- 3. Geração de PDF (Correção definitiva da página em branco) ---
+        async function gerarPDF() {
             const btn = document.getElementById('btn-gerar');
             btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Gerando PDF (Aguarde)...';
             btn.disabled = true;
 
-            const form = document.getElementById('briefing-form');
-            const formData = new FormData(form);
-            
-            // CORREÇÃO CRÍTICA 1: Largura fixa de 800px em vez de 100%.
-            // Evita que o renderizador colapse o texto ao jogar o elemento para fora da tela.
-            let htmlParaPdf = `
-                <div style="width: 800px; max-width: 800px; box-sizing: border-box; font-family: 'Helvetica', 'Arial', sans-serif; padding: 40px; color: #111827; background-color: #ffffff;">
-                    <h1 style="color: #2563eb; border-bottom: 3px solid #e5e7eb; padding-bottom: 10px; font-size: 26px; margin-bottom: 5px;">Briefing - Landing Page</h1>
-                    <p style="color: #6b7280; font-size: 14px; margin-top: 0; margin-bottom: 30px;">Respostas preenchidas pelo profissional.</p>
-            `;
-
-            let temRespostas = false;
-
-            // Insere o link do Canva no PDF (se ele tiver sido preenchido)
-            const canvaLink = document.querySelector('textarea[name="Link do Rascunho (Canva/Word)"]');
-            if (canvaLink && canvaLink.value.trim() !== '') {
-                temRespostas = true;
-                let canvaFormatado = canvaLink.value.replace(/\n/g, '<br>');
-                htmlParaPdf += `
-                    <div style="margin-bottom: 20px; background-color: #fefce8; padding: 20px; border-radius: 8px; border-left: 5px solid #facc15;">
-                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #854d0e; text-transform: uppercase; font-weight: bold;">Link do Rascunho (Canva/Word)</h3>
-                        <p style="margin: 0; font-size: 16px; color: #0f172a; line-height: 1.6;">${canvaFormatado}</p>
-                    </div>
-                `;
-            }
-
-            for (let [pergunta, resposta] of formData.entries()) {
-                if (resposta.trim() !== '') {
-                    temRespostas = true;
-                    let respostaFormatada = resposta.replace(/\n/g, '<br>');
-                    
-                    htmlParaPdf += `
-                        <div style="margin-bottom: 20px; background-color: #f8fafc; padding: 20px; border-radius: 8px; border-left: 5px solid #3b82f6;">
-                            <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #64748b; text-transform: uppercase; font-weight: bold;">${pergunta}</h3>
-                            <p style="margin: 0; font-size: 16px; color: #0f172a; line-height: 1.6;">${respostaFormatada}</p>
-                        </div>
-                    `;
-                }
-            }
-
-            if (!temRespostas) {
-                htmlParaPdf += `<p style="padding: 20px; background: #fee2e2; color: #991b1b; border-radius: 8px;">Nenhuma informação foi preenchida no formulário.</p>`;
-            }
-
-            htmlParaPdf += `</div>`;
-
-            // Cria o elemento físico de forma segura na tela
-            const containerTemp = document.createElement('div');
-            containerTemp.innerHTML = htmlParaPdf;
-            
-            // CORREÇÃO CRÍTICA 2: Bug do Scroll
-            // Posiciona o elemento na mesma altura exata da sua tela atual (window.scrollY)
-            // Se colocar no topo (top: 0), a biblioteca tira foto de uma área em branco dependendo da rolagem
-            containerTemp.style.position = 'absolute';
-            containerTemp.style.left = '-9999px';
-            containerTemp.style.top = window.scrollY + 'px'; 
-            document.body.appendChild(containerTemp);
-
-            const opt = {
-                margin:       10,
-                filename:     'briefing-site.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { 
-                    scale: 2, 
-                    useCORS: true, 
-                    scrollY: window.scrollY // Sincroniza o renderizador com a posição exata da tela
-                },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(opt).from(containerTemp).save().then(() => {
-                // Limpeza do container provisório
-                if(document.body.contains(containerTemp)) {
-                    document.body.removeChild(containerTemp);
-                }
-                
-                // Restaura o botão
+            const restaurarBotao = () => {
                 btn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Gerar PDF das Respostas';
                 btn.disabled = false;
-                
-                abrirModal();
-            }).catch(err => {
-                console.error("Erro ao gerar PDF:", err);
-                if(document.body.contains(containerTemp)) {
-                    document.body.removeChild(containerTemp);
+            };
+
+            try {
+                // O bundle do html2pdf já inclui o jsPDF.
+                const JsPDF = window.jspdf && window.jspdf.jsPDF;
+                if (!JsPDF) {
+                    throw new Error('jsPDF não foi carregado corretamente.');
                 }
-                btn.innerHTML = 'Erro ao gerar PDF. Tente novamente.';
-                btn.disabled = false;
-                alert("Ocorreu um erro ao gerar o PDF. Por favor, tente em outro navegador.");
-            });
+
+                // Coleta diretamente os valores atuais dos campos.
+                const respostas = [];
+
+                const canvaLink = document.querySelector('textarea[name="Link do Rascunho (Canva/Word)"]');
+                if (canvaLink && canvaLink.value.trim() !== '') {
+                    respostas.push({
+                        pergunta: 'Link do Rascunho (Canva/Word)',
+                        resposta: canvaLink.value.trim()
+                    });
+                }
+
+                document.querySelectorAll('#briefing-form textarea[name]').forEach(campo => {
+                    const valor = campo.value.trim();
+                    if (valor !== '') {
+                        respostas.push({
+                            pergunta: campo.name,
+                            resposta: valor
+                        });
+                    }
+                });
+
+                const pdf = new JsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const larguraPagina = pdf.internal.pageSize.getWidth();
+                const alturaPagina = pdf.internal.pageSize.getHeight();
+                const margemX = 18;
+                const margemTopo = 18;
+                const margemInferior = 18;
+                const larguraTexto = larguraPagina - (margemX * 2);
+                let y = margemTopo;
+
+                function novaPagina() {
+                    pdf.addPage();
+                    y = margemTopo;
+                }
+
+                function garantirEspaco(alturaNecessaria) {
+                    if (y + alturaNecessaria > alturaPagina - margemInferior) {
+                        novaPagina();
+                    }
+                }
+
+                // Cabeçalho
+                pdf.setFont('helvetica', 'bold');
+                pdf.setFontSize(20);
+                pdf.setTextColor(37, 99, 235);
+                pdf.text('Briefing - Landing Page', margemX, y);
+                y += 8;
+
+                pdf.setDrawColor(229, 231, 235);
+                pdf.setLineWidth(0.8);
+                pdf.line(margemX, y, larguraPagina - margemX, y);
+                y += 8;
+
+                pdf.setFont('helvetica', 'normal');
+                pdf.setFontSize(10);
+                pdf.setTextColor(107, 114, 128);
+                pdf.text('Respostas preenchidas pelo profissional.', margemX, y);
+                y += 12;
+
+                if (respostas.length === 0) {
+                    pdf.setFontSize(12);
+                    pdf.setTextColor(153, 27, 27);
+                    pdf.text('Nenhuma informação foi preenchida no formulário.', margemX, y);
+                } else {
+                    respostas.forEach((item) => {
+                        // Divide pergunta e resposta em linhas que cabem na página.
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(10);
+                        const linhasPergunta = pdf.splitTextToSize(String(item.pergunta), larguraTexto - 8);
+
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(11);
+                        const linhasResposta = pdf.splitTextToSize(String(item.resposta), larguraTexto - 8);
+
+                        const alturaPergunta = linhasPergunta.length * 4.5;
+                        const alturaResposta = linhasResposta.length * 5.2;
+                        const alturaBloco = 8 + alturaPergunta + 3 + alturaResposta + 8;
+
+                        // Se o bloco inteiro couber, mantém junto.
+                        if (alturaBloco <= (alturaPagina - margemTopo - margemInferior)) {
+                            garantirEspaco(alturaBloco);
+                        } else if (y > margemTopo + 5) {
+                            novaPagina();
+                        }
+
+                        // Pergunta
+                        pdf.setFont('helvetica', 'bold');
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(100, 116, 139);
+                        pdf.text(linhasPergunta, margemX + 4, y + 5);
+                        y += 5 + alturaPergunta + 2;
+
+                        // Resposta, linha a linha, permitindo quebra de página em respostas longas.
+                        pdf.setFont('helvetica', 'normal');
+                        pdf.setFontSize(11);
+                        pdf.setTextColor(15, 23, 42);
+
+                        linhasResposta.forEach((linha) => {
+                            if (y + 5.2 > alturaPagina - margemInferior) {
+                                novaPagina();
+                            }
+                            pdf.text(String(linha), margemX + 4, y);
+                            y += 5.2;
+                        });
+
+                        y += 7;
+
+                        if (y < alturaPagina - margemInferior) {
+                            pdf.setDrawColor(226, 232, 240);
+                            pdf.setLineWidth(0.3);
+                            pdf.line(margemX, y, larguraPagina - margemX, y);
+                            y += 7;
+                        }
+                    });
+                }
+
+                pdf.save('briefing-site.pdf');
+                abrirModal();
+            } catch (err) {
+                console.error('Erro ao gerar PDF:', err);
+                alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
+            } finally {
+                restaurarBotao();
+            }
         }
 
         function abrirModal() {
