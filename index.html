@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Briefing para Landing Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Biblioteca html2pdf para gerar o PDF no navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Auto-resizing textarea base styles - All inputs are now textareas */
+        textarea {
+            resize: none; /* Impede o usuário de puxar a borda */
+            overflow-y: hidden; /* Esconde a barra de rolagem vertical padrão */
+            min-height: 42px; /* Altura padrão parecida com um input comum */
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="bg-blue-600 p-8 text-white text-center">
+            <h1 class="text-3xl font-bold mb-2">Briefing do Seu Novo Site</h1>
+            <p class="text-blue-100 text-lg">Nos ajude a entender a sua visão para criarmos a Landing Page perfeita!</p>
+        </div>
+
+        <div class="p-6 md:p-10">
+            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-8 rounded-r-md">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-yellow-800">Instruções Importantes</h3>
+                        <div class="mt-2 text-sm text-yellow-700">
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><strong>Tudo aqui é opcional.</strong> O que você preencher será a base do conteúdo que vai aparecer no seu site.</li>
+                                <li><strong>Atenção às revisões:</strong> Faremos até 3 modificações após o envio deste formulário, por isso a importância de adicionar o máximo de informação possível aqui.</li>
+                                <li><strong>Dica Visual:</strong> Se preferir, você pode criar um rascunho da estrutura no Canva ou Word e nos enviar para entendermos melhor a sua ideia!</li>
+                            </ul>
+                            <div class="mt-4">
+                                <label class="block text-xs font-bold text-yellow-900 mb-1">Adicionar link do Canva (ou Word/Docs) caso tenha feito o rascunho:</label>
+                                <textarea rows="1" name="Link do Rascunho (Canva/Word)" class="w-full px-3 py-2 border border-yellow-300 rounded-md focus:ring-yellow-500 outline-none text-gray-800 bg-white shadow-sm" placeholder="Cole o link de compartilhamento aqui..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="briefing-form" class="space-y-10" onsubmit="event.preventDefault(); gerarPDF();">
+                
+                <section class="relative">
+                    <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">1. Informações Básicas e Contato</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo do Profissional</label>
+                            <textarea rows="1" name="Nome Completo" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: João da Silva"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Registro Profissional (Ex: CRM, OAB, CREA...)</label>
+                            <textarea rows="1" name="Registro Profissional" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Opcional. Ex: CRM 12345/SP"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Profissão / Cargo</label>
+                            <textarea rows="1" name="Profissão" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Advogado, Nutricionista, Mentor..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp (Para o site)</label>
+                            <textarea rows="1" name="WhatsApp" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="(00) 00000-0000"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">E-mail Profissional</label>
+                            <textarea rows="1" name="Email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="contato@seusite.com"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
+                            <textarea rows="1" name="Instagram" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="@seu.perfil"></textarea>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Endereço Físico (se tiver)</label>
+                            <textarea rows="1" name="Endereço" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Rua, Número, Cidade - Estado"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="dynamic-container mt-4 space-y-4"></div>
+                    <button type="button" onclick="adicionarCampoLivre(this, 'Info Básica')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors border border-gray-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Adicionar nova informação nesta seção
+                    </button>
+                </section>
+
+                <section class="relative">
+                    <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">2. Sobre Você e Sua História</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Sobre o Profissional (Mini Biografia)</label>
+                            <p class="text-xs text-gray-500 mb-2">Um resumo sobre quem você é, sua missão e o que te motiva.</p>
+                            <textarea name="Sobre o Profissional" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Formações e Especializações</label>
+                            <textarea name="Formações" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Liste suas graduações, cursos e certificações relevantes."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Deseja contar uma história?</label>
+                            <p class="text-xs text-gray-500 mb-2">Como você chegou até aqui? Uma jornada gera conexão com o cliente.</p>
+                            <textarea name="História do Profissional" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Seus Hobbies / Lado Pessoal (Opcional para conexão)</label>
+                            <textarea rows="1" name="Hobbies" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Amo correr na praia, ler sobre tecnologia, etc."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-container mt-4 space-y-4"></div>
+                    <button type="button" onclick="adicionarCampoLivre(this, 'Sobre Você')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors border border-gray-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Adicionar nova informação nesta seção
+                    </button>
+                </section>
+
+                <section class="relative">
+                    <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">3. Seu Negócio e Seus Serviços</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Áreas de Atuação / Serviços Oferecidos</label>
+                            <p class="text-xs text-gray-500 mb-2">Quais serviços ou produtos você vende? (Descreva brevemente cada um)</p>
+                            <textarea name="Áreas de Atuação" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Público-Alvo (Quem você atende?)</label>
+                            <p class="text-xs text-gray-500 mb-2">Ex: Mães de primeira viagem, empresas de pequeno porte, jovens estudantes...</p>
+                            <textarea rows="1" name="Público Alvo" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Qual o seu Grande Diferencial?</label>
+                            <p class="text-xs text-gray-500 mb-2">Por que o cliente deve escolher VOCÊ e não o concorrente?</p>
+                            <textarea rows="1" name="Diferencial" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Tabela de Preços / Planos (Se tiver)</label>
+                            <textarea name="Tabela de Preços" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Mentoria individual (R$X), Consultoria mensal (R$Y)"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Perguntas Frequentes (FAQ)</label>
+                            <p class="text-xs text-gray-500 mb-2">Quais são as dúvidas que os clientes sempre te mandam no WhatsApp?</p>
+                            <textarea name="Perguntas Frequentes" rows="3" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-container mt-4 space-y-4"></div>
+                    <button type="button" onclick="adicionarCampoLivre(this, 'Negócio/Serviços')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors border border-gray-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Adicionar nova informação nesta seção
+                    </button>
+                </section>
+
+                <section class="relative">
+                    <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">4. Estrutura Visual da Landing Page</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Objetivo Principal da Página</label>
+                            <p class="text-xs text-gray-500 mb-2">O que você quer que a pessoa faça ao entrar no site? (Clicar para o WhatsApp, Agendar horário, Comprar, etc.)</p>
+                            <textarea rows="1" name="Objetivo Principal" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Quais cores deseja no seu projeto?</label>
+                            <p class="text-xs text-gray-500 mb-2">Acesse <a href="https://htmlcolorcodes.com/" target="_blank" class="text-blue-600 hover:underline">htmlcolorcodes.com</a>, encontre suas cores preferidas e adicione o código da cor aqui (Exemplo: #001400).</p>
+                            <textarea rows="1" name="Cores do Projeto" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="#000000, #FFFFFF..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Caso tenha algum site de referência coloque o link:</label>
+                            <textarea rows="1" name="Sites de Referência" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="https://..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Links extras para adicionar</label>
+                            <p class="text-xs text-gray-500 mb-2">Links de vídeos no YouTube, lojas, outros perfis sociais, reportagens, etc.</p>
+                            <textarea name="Links Extras" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 border rounded-lg md:col-span-2">
+                            <h4 class="font-medium text-gray-800">📸 Fotos e Logo do Profissional</h4>
+                            <p class="text-sm text-gray-600 mt-1">Como vamos exportar isso em PDF, pedimos que você <strong>envie sua Logomarca e Fotos Profissionais diretamente no nosso WhatsApp</strong> junto com o arquivo PDF que será gerado abaixo.</p>
+                        </div>
+                    </div>
+
+                    <div class="dynamic-container mt-4 space-y-4"></div>
+                    <button type="button" onclick="adicionarCampoLivre(this, 'Visual/Estrutura')" class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-lg transition-colors border border-gray-300">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Adicionar nova informação nesta seção
+                    </button>
+                </section>
+
+                <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 text-center mt-8">
+                    <p class="text-blue-800 font-semibold text-lg flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Aviso Importante
+                    </p>
+                    <p class="text-blue-700 mt-2">Lembre-se: <strong>Tudo o que você adicionou neste formulário aparecerá no site!</strong> Revise as informações antes de gerar o documento.</p>
+                </div>
+
+                <div class="pt-6">
+                    <button type="submit" id="btn-gerar" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transition-transform transform hover:-translate-y-1 text-lg flex items-center justify-center gap-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Gerar PDF das Respostas
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="whatsapp-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl text-center transform scale-100 transition-all">
+            <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">PDF Gerado com Sucesso!</h3>
+            <p class="text-gray-600 mb-6">Seu arquivo <strong class="text-gray-800">briefing-site.pdf</strong> foi baixado no seu dispositivo.</p>
+            
+            <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+                <p class="text-green-800 font-medium">⚠️ Próximo Passo:</p>
+                <p class="text-green-700 text-sm mt-1">Por favor, envie o arquivo PDF gerado, juntamente com suas <strong>fotos e logotipo</strong> para o nosso WhatsApp para começarmos seu projeto!</p>
+            </div>
+
+            <div class="space-y-3">
+                <!-- O link do whatsapp atualizado com a mensagem exata -->
+                <a href="https://wa.me/?text=Formulario%20com%20suas%20informacoes%20para%20construcao%20da%20sua%20pagina.%20(Estou%20enviando%20o%20PDF%20e%20as%20fotos)" target="_blank" class="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    Enviar Mensagem no WhatsApp
+                </a>
+                <button onclick="fecharModal()" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-4 rounded-lg transition-colors">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. Auto-resize para TODOS os campos de texto ---
+        function autoResize(textarea) {
+            textarea.style.height = 'auto'; // Reseta a altura para recalcular
+            textarea.style.height = textarea.scrollHeight + 'px'; // Define a nova altura exata
+        }
+
+        // Aplica o evento de auto-resize globalmente
+        document.addEventListener('input', function (event) {
+            if (event.target.tagName.toLowerCase() === 'textarea') {
+                autoResize(event.target);
+            }
+        }, false);
+
+        // --- 2. Adicionar Campos Dinâmicos Livres em qualquer bloco ---
+        let contadorSecaoLivre = 0;
+        function adicionarCampoLivre(botao, nomeSecao) {
+            contadorSecaoLivre++;
+            // Encontra a div container imediatamente acima do botão clicado
+            const container = botao.previousElementSibling; 
+            
+            const div = document.createElement('div');
+            div.className = "p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-inner space-y-3 relative";
+            div.innerHTML = `
+                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-400 hover:text-red-600 font-bold bg-white rounded-full w-8 h-8 flex items-center justify-center border shadow-sm transition-colors" title="Remover informação">X</button>
+                <div class="pr-10">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Título da Informação (Adicional)</label>
+                    <textarea rows="1" name="[${nomeSecao}] Título Extra ${contadorSecaoLivre}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow bg-white" placeholder="Ex: Meus Valores, Benefícios, etc."></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                    <textarea rows="2" name="[${nomeSecao}] Descrição Extra ${contadorSecaoLivre}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow bg-white" placeholder="Digite o conteúdo livremente..."></textarea>
+                </div>
+            `;
+            container.appendChild(div);
+        }
+
+        // --- 3. NOVA Geração de PDF (Garante que nunca fique em branco) ---
+        function gerarPDF() {
+            const btn = document.getElementById('btn-gerar');
+            btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Gerando PDF (Aguarde)...';
+            btn.disabled = true;
+
+            const form = document.getElementById('briefing-form');
+            const formData = new FormData(form);
+            
+            // Construir o HTML do PDF usando INLINE CSS absoluto para não depender do navegador montar
+            let htmlParaPdf = `
+                <div style="width: 100%; max-width: 800px; margin: 0 auto; font-family: 'Helvetica', 'Arial', sans-serif; padding: 30px; color: #111827; background-color: #ffffff;">
+                    <h1 style="color: #2563eb; border-bottom: 3px solid #e5e7eb; padding-bottom: 10px; font-size: 26px; margin-bottom: 5px;">Briefing - Landing Page</h1>
+                    <p style="color: #6b7280; font-size: 14px; margin-top: 0; margin-bottom: 30px;">Respostas preenchidas pelo profissional.</p>
+            `;
+
+            let temRespostas = false;
+
+            for (let [pergunta, resposta] of formData.entries()) {
+                if (resposta.trim() !== '') {
+                    temRespostas = true;
+                    // Quebra de linha segura
+                    let respostaFormatada = resposta.replace(/\n/g, '<br>');
+                    
+                    htmlParaPdf += `
+                        <div style="margin-bottom: 20px; background-color: #f8fafc; padding: 20px; border-radius: 8px; border-left: 5px solid #3b82f6;">
+                            <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #64748b; text-transform: uppercase; font-weight: bold;">${pergunta}</h3>
+                            <p style="margin: 0; font-size: 16px; color: #0f172a; line-height: 1.6;">${respostaFormatada}</p>
+                        </div>
+                    `;
+                }
+            }
+
+            if (!temRespostas) {
+                htmlParaPdf += `<p style="padding: 20px; background: #fee2e2; color: #991b1b; border-radius: 8px;">Nenhuma informação foi preenchida no formulário.</p>`;
+            }
+
+            htmlParaPdf += `</div>`;
+
+            // Envia DIRETAMENTE a string HTML para a biblioteca html2pdf
+            // Isso evita bugs de renderização de divs ocultas na tela do usuário
+            const opt = {
+                margin:       [10, 10, 10, 10],
+                filename:     'briefing-site.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Gerar PDF direto da string HTML
+            html2pdf().set(opt).from(htmlParaPdf).save().then(() => {
+                // Restaura o botão
+                btn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Gerar PDF das Respostas';
+                btn.disabled = false;
+                
+                abrirModal();
+            }).catch(err => {
+                console.error("Erro ao gerar:", err);
+                btn.innerHTML = 'Erro ao gerar PDF. Tente novamente.';
+                btn.disabled = false;
+                alert("Ocorreu um erro ao gerar o PDF. Por favor, tente em outro navegador ou verifique os dados.");
+            });
+        }
+
+        function abrirModal() {
+            document.getElementById('whatsapp-modal').classList.remove('hidden');
+        }
+
+        function fecharModal() {
+            document.getElementById('whatsapp-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
