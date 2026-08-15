@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Briefing para Landing Page</title>
+    
+    <!-- TAGS PARA O WHATSAPP E REDES SOCIAIS (Open Graph) -->
+    <meta property="og:title" content="Briefing - Criação do seu Novo Site" />
+    <meta property="og:description" content="Nos ajude a entender a sua visão para criarmos a Landing Page perfeita! Preencha nosso formulário rápido." />
+    <!-- Altere o link abaixo para a URL da imagem que você quer que apareça no WhatsApp -->
+    <meta property="og:image" content="https://placehold.co/1200x630/2563eb/ffffff?text=Briefing+do+Seu+Novo+Site" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://seusite.com.br" /> <!-- Troque pelo seu link -->
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Biblioteca html2pdf para gerar o PDF no navegador -->
@@ -20,12 +29,21 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* Auto-resizing textarea base styles - All inputs are now textareas */
+        /* Auto-resizing textarea base styles */
         textarea {
-            resize: none; /* Impede o usuário de puxar a borda */
-            overflow-y: hidden; /* Esconde a barra de rolagem vertical padrão */
-            min-height: 42px; /* Altura padrão parecida com um input comum */
+            resize: none;
+            overflow-y: hidden;
+            min-height: 42px;
             line-height: 1.5;
+        }
+        
+        /* Oculta a div temporária usada para gerar o PDF */
+        #pdf-temp-container {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 800px; /* Força uma largura boa para o PDF */
+            z-index: -1;
         }
     </style>
 </head>
@@ -67,33 +85,41 @@
                 <section class="relative">
                     <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">1. Informações Básicas e Contato</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Exemplos longos foram movidos para a tag <p> abaixo do label, evitando cortes no celular -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo do Profissional</label>
-                            <textarea rows="1" name="Nome Completo" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: João da Silva"></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Ex: João da Silva</p>
+                            <textarea rows="1" name="Nome Completo" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Registro Profissional (Ex: CRM, OAB, CREA...)</label>
-                            <textarea rows="1" name="Registro Profissional" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Opcional. Ex: CRM 12345/SP"></textarea>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Registro Profissional (Opcional)</label>
+                            <p class="text-xs text-gray-500 mb-2">Ex: CRM, OAB, CREA... (Ex: CRM 12345/SP)</p>
+                            <textarea rows="1" name="Registro Profissional" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Profissão / Cargo</label>
-                            <textarea rows="1" name="Profissão" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Advogado, Nutricionista, Mentor..."></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Ex: Advogado, Nutricionista, Mentor...</p>
+                            <textarea rows="1" name="Profissão" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp (Para o site)</label>
+                            <p class="text-xs text-gray-500 mb-2">Seu número com DDD</p>
                             <textarea rows="1" name="WhatsApp" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="(00) 00000-0000"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">E-mail Profissional</label>
+                            <p class="text-xs text-gray-500 mb-2">E-mail para contato</p>
                             <textarea rows="1" name="Email" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="contato@seusite.com"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Instagram</label>
+                            <p class="text-xs text-gray-500 mb-2">Link ou @ do seu perfil</p>
                             <textarea rows="1" name="Instagram" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="@seu.perfil"></textarea>
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Endereço Físico (se tiver)</label>
-                            <textarea rows="1" name="Endereço" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Rua, Número, Cidade - Estado"></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Rua, Número, Bairro, Cidade - Estado</p>
+                            <textarea rows="1" name="Endereço" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                     </div>
                     
@@ -114,7 +140,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Formações e Especializações</label>
-                            <textarea name="Formações" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Liste suas graduações, cursos e certificações relevantes."></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Liste suas graduações, cursos e certificações relevantes.</p>
+                            <textarea name="Formações" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Deseja contar uma história?</label>
@@ -123,7 +150,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Seus Hobbies / Lado Pessoal (Opcional para conexão)</label>
-                            <textarea rows="1" name="Hobbies" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Amo correr na praia, ler sobre tecnologia, etc."></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Ex: Amo correr na praia, ler sobre tecnologia, etc.</p>
+                            <textarea rows="1" name="Hobbies" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                     </div>
 
@@ -154,7 +182,8 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Tabela de Preços / Planos (Se tiver)</label>
-                            <textarea name="Tabela de Preços" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="Ex: Mentoria individual (R$X), Consultoria mensal (R$Y)"></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Ex: Mentoria individual (R$X), Consultoria mensal (R$Y)</p>
+                            <textarea name="Tabela de Preços" rows="2" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Perguntas Frequentes (FAQ)</label>
@@ -180,12 +209,13 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Quais cores deseja no seu projeto?</label>
-                            <p class="text-xs text-gray-500 mb-2">Acesse <a href="https://htmlcolorcodes.com/" target="_blank" class="text-blue-600 hover:underline">htmlcolorcodes.com</a>, encontre suas cores preferidas e adicione o código da cor aqui (Exemplo: #001400).</p>
-                            <textarea rows="1" name="Cores do Projeto" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="#000000, #FFFFFF..."></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Acesse <a href="https://htmlcolorcodes.com/" target="_blank" class="text-blue-600 hover:underline">htmlcolorcodes.com</a>, encontre suas cores e cole aqui (Exemplo: #001400).</p>
+                            <textarea rows="1" name="Cores do Projeto" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Caso tenha algum site de referência coloque o link:</label>
-                            <textarea rows="1" name="Sites de Referência" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow" placeholder="https://..."></textarea>
+                            <p class="text-xs text-gray-500 mb-2">Links de sites que você acha bonitos e quer usar de inspiração.</p>
+                            <textarea rows="1" name="Sites de Referência" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-shadow"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Links extras para adicionar</label>
@@ -238,7 +268,6 @@
             </div>
 
             <div class="space-y-3">
-                <!-- O link do whatsapp atualizado com a mensagem exata -->
                 <a href="https://wa.me/?text=Formulario%20com%20suas%20informacoes%20para%20construcao%20da%20sua%20pagina.%20(Estou%20enviando%20o%20PDF%20e%20as%20fotos)" target="_blank" class="w-full flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 00-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                     Enviar Mensagem no WhatsApp
@@ -253,14 +282,14 @@
     <script>
         // --- 1. Auto-resize para TODOS os campos de texto ---
         function autoResize(textarea) {
-            textarea.style.height = 'auto'; // Reseta a altura para recalcular
-            textarea.style.height = textarea.scrollHeight + 'px'; // Define a nova altura exata
+            textarea.style.height = 'auto';
+            textarea.style.height = textarea.scrollHeight + 'px';
         }
 
-        // Aplica o evento de auto-resize globalmente
         document.addEventListener('input', function (event) {
             if (event.target.tagName.toLowerCase() === 'textarea') {
                 autoResize(event.target);
+                salvarDados(); // Salva os dados automaticamente a cada letra digitada
             }
         }, false);
 
@@ -268,13 +297,12 @@
         let contadorSecaoLivre = 0;
         function adicionarCampoLivre(botao, nomeSecao) {
             contadorSecaoLivre++;
-            // Encontra a div container imediatamente acima do botão clicado
             const container = botao.previousElementSibling; 
             
             const div = document.createElement('div');
             div.className = "p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-inner space-y-3 relative";
             div.innerHTML = `
-                <button type="button" onclick="this.parentElement.remove()" class="absolute top-2 right-2 text-red-400 hover:text-red-600 font-bold bg-white rounded-full w-8 h-8 flex items-center justify-center border shadow-sm transition-colors" title="Remover informação">X</button>
+                <button type="button" onclick="removerCampoLivre(this)" class="absolute top-2 right-2 text-red-400 hover:text-red-600 font-bold bg-white rounded-full w-8 h-8 flex items-center justify-center border shadow-sm transition-colors" title="Remover informação">X</button>
                 <div class="pr-10">
                     <label class="block text-sm font-medium text-gray-700 mb-1">Título da Informação (Adicional)</label>
                     <textarea rows="1" name="[${nomeSecao}] Título Extra ${contadorSecaoLivre}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow bg-white" placeholder="Ex: Meus Valores, Benefícios, etc."></textarea>
@@ -285,9 +313,108 @@
                 </div>
             `;
             container.appendChild(div);
+            salvarDados(); // Salva assim que adicionar um novo campo
         }
 
-        // --- 3. NOVA Geração de PDF (Garante que nunca fique em branco) ---
+        // Função para remover campo e atualizar o salvamento
+        function removerCampoLivre(btn) {
+            btn.parentElement.remove();
+            salvarDados();
+        }
+
+        // --- 2.5. Salvar e Carregar Dados Automaticamente (LocalStorage) ---
+        function salvarDados() {
+            const dataToSave = { static: {}, dynamic: [] };
+            
+            // Salvar campos estáticos (incluindo o do Canva que está fora do form)
+            document.querySelectorAll('textarea').forEach(textarea => {
+                if (!textarea.name.includes('Título Extra') && !textarea.name.includes('Descrição Extra')) {
+                    dataToSave.static[textarea.name] = textarea.value;
+                }
+            });
+
+            // Salvar campos dinâmicos criados pelo usuário
+            const containers = document.querySelectorAll('.dynamic-container');
+            containers.forEach((container, index) => {
+                const fields = [];
+                container.querySelectorAll('.p-4').forEach(div => {
+                    const titleTextarea = div.querySelector('textarea[name*="Título Extra"]');
+                    const descTextarea = div.querySelector('textarea[name*="Descrição Extra"]');
+                    if(titleTextarea && descTextarea) {
+                        fields.push({
+                            titleName: titleTextarea.name,
+                            titleValue: titleTextarea.value,
+                            descName: descTextarea.name,
+                            descValue: descTextarea.value
+                        });
+                    }
+                });
+                dataToSave.dynamic.push({ index: index, fields: fields });
+            });
+
+            localStorage.setItem('briefingFormData', JSON.stringify(dataToSave));
+        }
+
+        function carregarDados() {
+            const saved = localStorage.getItem('briefingFormData');
+            if(!saved) return;
+            
+            try {
+                const data = JSON.parse(saved);
+
+                // Restaurar campos estáticos
+                if (data.static) {
+                    for (let key in data.static) {
+                        const elements = document.getElementsByName(key);
+                        if (elements.length > 0 && data.static[key]) {
+                            elements[0].value = data.static[key];
+                            autoResize(elements[0]);
+                        }
+                    }
+                }
+
+                // Restaurar campos dinâmicos
+                if (data.dynamic) {
+                    const containers = document.querySelectorAll('.dynamic-container');
+                    data.dynamic.forEach(containerData => {
+                        const container = containers[containerData.index];
+                        if(container) {
+                            containerData.fields.forEach(field => {
+                                contadorSecaoLivre++; 
+                                
+                                const div = document.createElement('div');
+                                div.className = "p-4 border border-gray-200 rounded-lg bg-gray-50 shadow-inner space-y-3 relative";
+                                div.innerHTML = `
+                                    <button type="button" onclick="removerCampoLivre(this)" class="absolute top-2 right-2 text-red-400 hover:text-red-600 font-bold bg-white rounded-full w-8 h-8 flex items-center justify-center border shadow-sm transition-colors" title="Remover informação">X</button>
+                                    <div class="pr-10">
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Título da Informação (Adicional)</label>
+                                        <textarea rows="1" name="${field.titleName}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow bg-white" placeholder="Ex: Meus Valores, Benefícios, etc.">${field.titleValue}</textarea>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                                        <textarea rows="2" name="${field.descName}" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-shadow bg-white" placeholder="Digite o conteúdo livremente...">${field.descValue}</textarea>
+                                    </div>
+                                `;
+                                container.appendChild(div);
+                                
+                                // Ajusta a altura após ser inserido na tela
+                                setTimeout(() => {
+                                    autoResize(div.querySelector(`textarea[name="${field.titleName}"]`));
+                                    autoResize(div.querySelector(`textarea[name="${field.descName}"]`));
+                                }, 0);
+                            });
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error("Erro ao carregar dados salvos", e);
+            }
+        }
+
+        // Executa a função de carregar assim que o site abrir
+        window.addEventListener('DOMContentLoaded', carregarDados);
+
+        // --- 3. NOVA Geração de PDF (Correção da página em branco) ---
         function gerarPDF() {
             const btn = document.getElementById('btn-gerar');
             btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Gerando PDF (Aguarde)...';
@@ -296,19 +423,30 @@
             const form = document.getElementById('briefing-form');
             const formData = new FormData(form);
             
-            // Construir o HTML do PDF usando INLINE CSS absoluto para não depender do navegador montar
             let htmlParaPdf = `
-                <div style="width: 100%; max-width: 800px; margin: 0 auto; font-family: 'Helvetica', 'Arial', sans-serif; padding: 30px; color: #111827; background-color: #ffffff;">
+                <div style="width: 100%; font-family: 'Helvetica', 'Arial', sans-serif; padding: 30px; color: #111827; background-color: #ffffff;">
                     <h1 style="color: #2563eb; border-bottom: 3px solid #e5e7eb; padding-bottom: 10px; font-size: 26px; margin-bottom: 5px;">Briefing - Landing Page</h1>
                     <p style="color: #6b7280; font-size: 14px; margin-top: 0; margin-bottom: 30px;">Respostas preenchidas pelo profissional.</p>
             `;
 
             let temRespostas = false;
 
+            // Insere o link do Canva no PDF (se ele tiver sido preenchido)
+            const canvaLink = document.querySelector('textarea[name="Link do Rascunho (Canva/Word)"]');
+            if (canvaLink && canvaLink.value.trim() !== '') {
+                temRespostas = true;
+                let canvaFormatado = canvaLink.value.replace(/\n/g, '<br>');
+                htmlParaPdf += `
+                    <div style="margin-bottom: 20px; background-color: #fefce8; padding: 20px; border-radius: 8px; border-left: 5px solid #facc15;">
+                        <h3 style="margin: 0 0 8px 0; font-size: 14px; color: #854d0e; text-transform: uppercase; font-weight: bold;">Link do Rascunho (Canva/Word)</h3>
+                        <p style="margin: 0; font-size: 16px; color: #0f172a; line-height: 1.6;">${canvaFormatado}</p>
+                    </div>
+                `;
+            }
+
             for (let [pergunta, resposta] of formData.entries()) {
                 if (resposta.trim() !== '') {
                     temRespostas = true;
-                    // Quebra de linha segura
                     let respostaFormatada = resposta.replace(/\n/g, '<br>');
                     
                     htmlParaPdf += `
@@ -326,18 +464,26 @@
 
             htmlParaPdf += `</div>`;
 
-            // Envia DIRETAMENTE a string HTML para a biblioteca html2pdf
-            // Isso evita bugs de renderização de divs ocultas na tela do usuário
+            // CORREÇÃO PDF EM BRANCO: Criamos um elemento real (escondido) na tela
+            // Isso força o html2canvas a desenhar/renderizar o conteúdo corretamente antes do print
+            const containerTemp = document.createElement('div');
+            containerTemp.id = 'pdf-temp-container';
+            containerTemp.innerHTML = htmlParaPdf;
+            document.body.appendChild(containerTemp);
+
             const opt = {
                 margin:       [10, 10, 10, 10],
                 filename:     'briefing-site.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
-            // Gerar PDF direto da string HTML
-            html2pdf().set(opt).from(htmlParaPdf).save().then(() => {
+            // Gera o PDF a partir do elemento físico na tela
+            html2pdf().set(opt).from(containerTemp).save().then(() => {
+                // Remove o elemento temporário
+                document.body.removeChild(containerTemp);
+                
                 // Restaura o botão
                 btn.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Gerar PDF das Respostas';
                 btn.disabled = false;
@@ -345,9 +491,11 @@
                 abrirModal();
             }).catch(err => {
                 console.error("Erro ao gerar:", err);
+                if(document.body.contains(containerTemp)) document.body.removeChild(containerTemp);
+                
                 btn.innerHTML = 'Erro ao gerar PDF. Tente novamente.';
                 btn.disabled = false;
-                alert("Ocorreu um erro ao gerar o PDF. Por favor, tente em outro navegador ou verifique os dados.");
+                alert("Ocorreu um erro ao gerar o PDF. Por favor, tente em outro navegador.");
             });
         }
 
