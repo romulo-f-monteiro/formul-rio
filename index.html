@@ -8,10 +8,10 @@
     <!-- TAGS PARA O WHATSAPP E REDES SOCIAIS (Open Graph) -->
     <meta property="og:title" content="Briefing - Criação do seu Novo Site" />
     <meta property="og:description" content="Nos ajude a entender a sua visão para criarmos a Landing Page perfeita! Preencha nosso formulário rápido." />
-    <!-- Altere o link abaixo para a URL da imagem que você quer que apareça no WhatsApp -->
-    <meta property="og:image" content="https://placehold.co/1200x630/2563eb/ffffff?text=Briefing+do+Seu+Novo+Site" />
+    <!-- IMAGEM ATUALIZADA: Foto de um formulário/documento para aparecer no WhatsApp -->
+    <meta property="og:image" content="https://images.unsplash.com/photo-1554224154-22dec7ec8818?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=630&q=80" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://seusite.com.br" /> <!-- Troque pelo seu link -->
+    <meta property="og:url" content="https://seusite.com.br" /> <!-- Troque pelo seu link real depois -->
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,7 +43,7 @@
             position: absolute;
             left: -9999px;
             top: 0;
-            width: 800px; /* Força uma largura boa para o PDF */
+            width: 800px;
             z-index: -1;
         }
     </style>
@@ -86,7 +86,6 @@
                 <section class="relative">
                     <h2 class="text-xl font-semibold border-b pb-2 mb-4 text-gray-700">1. Informações Básicas e Contato</h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Exemplos longos foram movidos para a tag <p> abaixo do label, evitando cortes no celular -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo do Profissional</label>
                             <p class="text-xs text-gray-500 mb-2">Ex: João da Silva</p>
@@ -261,7 +260,8 @@
                 <svg class="w-10 h-10 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <h3 class="text-2xl font-bold text-gray-800 mb-2">PDF Gerado com Sucesso!</h3>
-            <p class="text-gray-600 mb-6">Seu arquivo <strong class="text-gray-800">briefing-site.pdf</strong> foi baixado no seu dispositivo.</p>
+            <!-- TEXTO ATUALIZADO AQUI -->
+            <p class="text-gray-600 mb-6">Seu PDF foi <strong class="text-gray-800">gerado e aberto em uma nova aba</strong> do seu navegador.</p>
             
             <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
                 <p class="text-green-800 font-medium">⚠️ Próximo Passo:</p>
@@ -415,7 +415,7 @@
         // Executa a função de carregar assim que o site abrir
         window.addEventListener('DOMContentLoaded', carregarDados);
 
-        // --- 3. Geração de PDF (Correção definitiva da página em branco) ---
+        // --- 3. Geração e Abertura do PDF em Nova Aba ---
         async function gerarPDF() {
             const btn = document.getElementById('btn-gerar');
             btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Gerando PDF (Aguarde)...';
@@ -554,7 +554,11 @@
                     });
                 }
 
-                pdf.save('briefing-site.pdf');
+                // CÓDIGO ATUALIZADO: Ao invés de .save, usamos o Blob URL para abrir em nova guia
+                const pdfBlob = pdf.output('blob');
+                const blobUrl = URL.createObjectURL(pdfBlob);
+                window.open(blobUrl, '_blank'); // Abre o PDF em uma nova aba
+
                 abrirModal();
             } catch (err) {
                 console.error('Erro ao gerar PDF:', err);
